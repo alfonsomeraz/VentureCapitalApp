@@ -1,11 +1,29 @@
 import streamlit as st
 import pandas as pd
 import datetime
-from database import get_data
+# from database import get_data, add_data
+# from database import init_connection
+import pymongo
 from schema import Deal
 from millify import millify
 
+@st.cache_resource()
+def init_connection():
+  return pymongo.MongoClient(**st.secrets["mongo"])
 
+client = init_connection()
+
+# Pull data from the collection.
+@st.cache_data(ttl=60)
+def get_data():
+  db = client["venture_capital"]
+  items = db["deals"].find()
+  items = list(items)
+  return items
+
+def add_data(data):
+  db = client["venture_capital"]
+  db["deals"].insert_one(data)
 
 # collection = get_data()
 
@@ -88,7 +106,7 @@ def main():
             investors=investors,
             date_added=date_added
           )
-          collection.insert_one(new_deal.dict())
+          add_data(new_deal.dict())
           st.success("Deal Added!")
 
 

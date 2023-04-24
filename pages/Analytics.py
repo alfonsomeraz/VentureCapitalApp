@@ -4,16 +4,13 @@ from database import get_data
 import altair as alt
 
 
-collection = get_data()
-
-
 def main():
     st.title("Data Visualization")
     st.write("This page is to visualize the data from the database.")
     
-    deals = collection.find({})
+    deals = get_data()
 
-    df = pd.DataFrame(list(deals))
+    df = pd.DataFrame(deals)
     df = df.drop(columns=['_id'])
 
     deal_size_by_industry = df.groupby('industry')['deal_size'].sum().reset_index()
