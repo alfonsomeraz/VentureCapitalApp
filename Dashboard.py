@@ -7,7 +7,7 @@ from millify import millify
 
 
 
-collection = get_data()
+# collection = get_data()
 
 def check_password():
     """Returns `True` if the user had the correct password."""
@@ -45,8 +45,8 @@ def main():
   st.title('Venture Capital Dashboard')
   st.write("This dashboard is to track venture capital deals across the US.")
 
-  deals = collection.find({})
-  df = pd.DataFrame(list(deals))
+  deals = get_data()
+  df = pd.DataFrame(deals)
 
   deal_form, news = st.columns(2)
 

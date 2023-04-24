@@ -11,10 +11,11 @@ client = init_connection()
 
 
 # Pull data from the collection.
-
+@st.cache_data(ttl=600)
 def get_data():
   db = client["venture_capital"]
-  collection = db["deals"]
-  return collection
+  items = db["deals"].find()
+  items = list(items)
+  return items
 
 
